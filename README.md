@@ -1,2 +1,2 @@
 # bpdtool
-Binary Packet Designer Tool
+Binary Protocol Designer Tool

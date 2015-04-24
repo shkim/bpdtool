@@ -1,0 +1,30 @@
+package bpdtool.data;
+
+public class TypeCategory
+{
+/*
+	public static final int CUSTOM =1,
+	SIGNED_INTEGER =2,
+	UNSIGNED_INTEGER =3,
+	BOOL =4,
+	FLOAT =5,
+
+	STRING =10,
+	STRING_TINY =11,
+	STD_STRING =12,
+	STD_STRING_TINY =13,
+
+	WIDESTRING =20,
+	WIDESTRING_TINY =21,
+	TSTRING =22,
+	TSTRING_TINY =23,
+
+	STD_WIDESTRING =30,
+	STD_WIDESTRING_TINY =31,
+	STD_TSTRING =32,
+	STD_TSTRING_TINY =33,
+
+	BUFFER =40,
+	BUFFER_TINY =41;
+*/
+}
