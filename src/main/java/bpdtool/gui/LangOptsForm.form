@@ -142,11 +142,20 @@
               </component>
               <component id="e9340" class="javax.swing.JCheckBox" binding="m_chkCppServerBE">
                 <constraints>
-                  <grid row="12" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="12" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                   <forms/>
                 </constraints>
                 <properties>
                   <text value="CPU is Big Endian"/>
+                </properties>
+              </component>
+              <component id="33f27" class="javax.swing.JCheckBox" binding="m_chkCppServerGenImpl">
+                <constraints>
+                  <grid row="12" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <forms/>
+                </constraints>
+                <properties>
+                  <text value="Generate Sample header file"/>
                 </properties>
               </component>
             </children>
@@ -264,11 +273,20 @@
               </component>
               <component id="25828" class="javax.swing.JCheckBox" binding="m_chkCppClientBE">
                 <constraints>
-                  <grid row="13" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="13" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                   <forms/>
                 </constraints>
                 <properties>
                   <text value="CPU is Big Endian"/>
+                </properties>
+              </component>
+              <component id="3f67d" class="javax.swing.JCheckBox" binding="m_chkCppClientGenImpl">
+                <constraints>
+                  <grid row="13" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <forms/>
+                </constraints>
+                <properties>
+                  <text value="Generate Sample header file"/>
                 </properties>
               </component>
             </children>
@@ -431,7 +449,7 @@
           <forms/>
         </constraints>
         <properties/>
-        <border type="etched" title="JavaScript"/>
+        <border type="etched" title="JavaScript (Node.js)"/>
         <children>
           <grid id="8f949" layout-manager="FormLayout">
             <rowspec value="center:d:noGrow"/>
@@ -451,7 +469,7 @@
                   <forms/>
                 </constraints>
                 <properties>
-                  <text value="Class Name:"/>
+                  <text value="Module Name:"/>
                 </properties>
               </component>
               <component id="65ac6" class="javax.swing.JTextField" binding="m_tfJsServerClass">
@@ -483,7 +501,7 @@
                   <forms/>
                 </constraints>
                 <properties>
-                  <text value="Class Name:"/>
+                  <text value="Module Name:"/>
                 </properties>
               </component>
               <component id="e8b3b" class="javax.swing.JTextField" binding="m_tfJsClientClass">

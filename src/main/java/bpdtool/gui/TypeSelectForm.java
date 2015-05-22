@@ -5,7 +5,7 @@ import bpdtool.data.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.HashMap;
+import java.util.*;
 
 public class TypeSelectForm extends JDialog
 {
@@ -170,10 +170,13 @@ public class TypeSelectForm extends JDialog
 		m_isAllPrimitivesLoaded = true;
 
 		m_cbPrimitives.removeAllItems();
-		for (String primTypeName : Protocol.getPrimitiveTypeNames())
+		String[] types = Protocol.getPrimitiveTypeNames();
+		Arrays.sort(types, 1, types.length, String.CASE_INSENSITIVE_ORDER);
+		for (String primTypeName : types)
 		{
 			m_cbPrimitives.addItem(primTypeName);
 		}
+
 	}
 
 	private void loadDelegatePrimitives(HashMap<PrimitiveType, String> delePrims)
@@ -182,19 +185,23 @@ public class TypeSelectForm extends JDialog
 		s_needUpdateDelegatePrimitives = false;
 
 		m_cbPrimitives.removeAllItems();
-		for (String typename : delePrims.values())
-		{
-			m_cbPrimitives.addItem(typename);
-		}
+		ArrayList<String> types = new ArrayList<>();
+		types.addAll(delePrims.values());
 
 		// Non-numeric types (String, Buffer)
 		for (String key : Protocol.getAllPrimitives().keySet())
 		{
 			PrimitiveType pt = Protocol.getAllPrimitives().get(key);
-			if (pt.getCategory() == 0)
+			if (pt.getSizeBytes() == 0)
 			{
-				m_cbPrimitives.addItem(key);
+				types.add(key);
 			}
+		}
+
+		Collections.sort(types, String.CASE_INSENSITIVE_ORDER);
+		for (String typename : types)
+		{
+			m_cbPrimitives.addItem(typename);
 		}
 	}
 

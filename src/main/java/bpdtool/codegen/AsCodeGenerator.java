@@ -7,6 +7,8 @@ import bpdtool.gui.MainFrame;
 // (ADOBE FLASH) ActionScript3 Code Generator 
 public class AsCodeGenerator extends CodeGenerator
 {
+	private final String PREFIX_PACKETRECEIVER = "_recv_";
+
 	private boolean m_bServerIsBigEndian;
 	private String m_strPacketPackageName;
 	private String m_strBasePackageName;
@@ -32,7 +34,7 @@ public class AsCodeGenerator extends CodeGenerator
 			}
 		}
 
-		return false;
+		return true;
 	}
 	
 	@Override
@@ -254,7 +256,7 @@ public class AsCodeGenerator extends CodeGenerator
 				}
 			}
 		}
-		getTabWriteBuffer().writeln("private static const {0}\t:{1} = {2};", C2S_LASTPACKETID, idvtype, getIdStr(getExporter().getMaxC2SPacketID()));
+		getTabWriteBuffer().writeln("private static const {0}{1}\t:{2} = {3};", m_doc.getConfig().Prefix.C2SPacketID, SUFFIX_LASTPACKETID, idvtype, getIdStr(getExporter().getMaxC2SPacketID()));
 		getTabWriteBuffer().end(sw, 1);
 		sw.writeln("");
 		
@@ -276,7 +278,7 @@ public class AsCodeGenerator extends CodeGenerator
 				}
 			}
 		}
-		getTabWriteBuffer().writeln("private static const {0}\t:{1} = {2};", S2C_LASTPACKETID, idvtype, getIdStr(getExporter().getMaxS2CPacketID()));
+		getTabWriteBuffer().writeln("private static const {0}{1}\t:{2} = {3};", m_doc.getConfig().Prefix.S2CPacketID, SUFFIX_LASTPACKETID, idvtype, getIdStr(getExporter().getMaxS2CPacketID()));
 		getTabWriteBuffer().end(sw, 1);
 
 		return sw.toString();
@@ -339,7 +341,7 @@ public class AsCodeGenerator extends CodeGenerator
 
 			if (ct.isEnum())
 			{
-				int iEnum = 0;
+				int nEnumValue = 0;
 				getTabWriteBuffer().begin();
 				for (int i = 0; i < ct.getFields().size(); i++)
 				{
@@ -351,14 +353,16 @@ public class AsCodeGenerator extends CodeGenerator
 						getTabWriteBuffer().write("{0};", fld.getValue());
 
 						if(fld.getValue().startsWith("0x"))
-							iEnum = Integer.parseInt(fld.getValue().substring(2), 16);
+							nEnumValue = Integer.parseInt(fld.getValue().substring(2), 16);
 						else
-							iEnum = Integer.parseInt(fld.getValue());
+							nEnumValue = Integer.parseInt(fld.getValue());
 					}
 					else
 					{
-						getTabWriteBuffer().write("{0};", iEnum++);
+						getTabWriteBuffer().write("{0};", nEnumValue);
 					}
+
+					++nEnumValue;
 
 					if (!Util.isNullOrEmpty(fld.getComment()) && m_useComment)
 						getTabWriteBuffer().writeln(" // " + fld.getComment());

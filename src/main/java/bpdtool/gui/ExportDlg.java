@@ -83,12 +83,15 @@ public class ExportDlg extends JDialog
 		}
 		else if (e.getSource() == m_btnExport)
 		{
-			onCancel();
+			onExport();
 		}
 		else if (e.getSource() == m_btnCancel)
 		{
 			onCancel();
+			return;
 		}
+
+		m_btnCancel.setText("Close");
 	}
 
 	private void disableMoreAction()

@@ -28,4 +28,9 @@ public class StringWriter implements ITextWriter
 	{
 		return m_sb.toString();
 	}
+
+	public void reset()
+	{
+		m_sb.setLength(0);
+	}
 }

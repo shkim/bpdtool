@@ -1,10 +1,11 @@
+
 // YOU MAY USE THIS FILE AS THE SKELETON CODE OF THE CLIENT-SIDE SOCKET CLASS.
 
 #include "netstream.h"
 
 $$NamespaceBegin$$
 // Rename _$$ClassName$$.h to $$ClassName$$.h, then add to your project & edit.
-class $$ClassName$$ : public GP::Net::ITcpSocketListener
+class $$ClassName$$ : public ITcpSocketListener
 {
 public:
 	virtual void OnDisconnect();
@@ -26,7 +27,7 @@ public:
 
 	virtual unsigned int OnReceive(char* pBuffer, unsigned int nLength)
 	{
-		Net::NetStreamReader$$SwapEndian$$ _nsr(pBuffer);
+		NetStreamReader$$SwapEndian$$ _nsr(pBuffer);
 
 	_nextPacket:
 

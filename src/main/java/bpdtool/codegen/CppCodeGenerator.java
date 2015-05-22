@@ -6,21 +6,15 @@ import bpdtool.gui.MainFrame;
 
 import java.util.ArrayList;
 
-class NsWhat
-{
-	boolean hasRepeat;
-	PrimitiveType pt;
-}
-
 public class CppCodeGenerator  extends CodeGenerator
 {
 	private final String VAR_SOCKETPTR = "m_pSocket";
 	private final String VAR_PACKETDISPATCHTABLE = "m_pPacketDispatchTable";
-//	private final String VAR_SENDPACKETFLUSH = "m_bSendPacketImmediately";
 	private final String VAR_PACKETDISPATCHTABLEBEGIN = "s_aPacketDispatchTable";
 	private final String FUNC_SETUPDISPATCHTABLE = "SetupPacketDispatchTable";
 	private final String FUNC_SETDISPATCHTABLE = "SetPacketDispatchStage";
 	private final String SUFFIX_PACKETRECVFUNCT = "PacketReceiverFuncT";
+	private final String PREFIX_PACKETRECEIVER = "_Recv_";
 
 	private boolean m_useComment;
 	private boolean m_useNamespace;
@@ -332,7 +326,6 @@ public class CppCodeGenerator  extends CodeGenerator
 
 		String idvtype = m_doc.getConfig().Use16BitPacketID ? "unsigned short" : "unsigned char";
 
-		int lastPacketId = 0;
 		getTabWriteBuffer().begin();
 		for (PacketGroup grp : m_doc.getPacketGroups())
 		{
@@ -340,12 +333,13 @@ public class CppCodeGenerator  extends CodeGenerator
 			{
 				if (pkt.getFlow() != Packet.FLOW_S2C)
 				{
-					lastPacketId = pkt.getExportC2SID();
-					getTabWriteBuffer().writeln("static const {0} {1}{2}\t= {3};", idvtype, m_doc.getConfig().Prefix.C2SPacketID, pkt.getName(), getIdStr(lastPacketId));
+					getTabWriteBuffer().writeln("static const {0} {1}{2}\t= {3};", idvtype,
+						m_doc.getConfig().Prefix.C2SPacketID, pkt.getName(), getIdStr(pkt.getExportC2SID()));
 				}
 			}
 		}
-		getTabWriteBuffer().writeln("static const {0} {1}\t= {2};", idvtype, C2S_LASTPACKETID, getIdStr(lastPacketId));
+		getTabWriteBuffer().writeln("static const {0} {1}{2}\t= {3};", idvtype,
+			m_doc.getConfig().Prefix.C2SPacketID, SUFFIX_LASTPACKETID, getIdStr(getExporter().getMaxC2SPacketID()));
 		getTabWriteBuffer().end(sw, 1);
 
 		sw.writeln("");
@@ -357,7 +351,6 @@ public class CppCodeGenerator  extends CodeGenerator
 			sw.writeln("\t// Server->Client Packet IDs:");
 		}
 
-		lastPacketId = 0;
 		getTabWriteBuffer().begin();
 		for (PacketGroup grp : m_doc.getPacketGroups())
 		{
@@ -365,12 +358,13 @@ public class CppCodeGenerator  extends CodeGenerator
 			{
 				if (pkt.getFlow() != Packet.FLOW_C2S)
 				{
-					lastPacketId = pkt.getExportS2CID();
-					getTabWriteBuffer().writeln("static const {0} {1}{2}\t= {3};", idvtype, m_doc.getConfig().Prefix.S2CPacketID, pkt.getName(), getIdStr(lastPacketId));
+					getTabWriteBuffer().writeln("static const {0} {1}{2}\t= {3};", idvtype,
+						m_doc.getConfig().Prefix.S2CPacketID, pkt.getName(), getIdStr(pkt.getExportS2CID()));
 				}
 			}
 		}
-		getTabWriteBuffer().writeln("static const {0} {1}\t= {2};", idvtype, S2C_LASTPACKETID, getIdStr(lastPacketId));
+		getTabWriteBuffer().writeln("static const {0} {1}{2}\t= {3};", idvtype,
+			m_doc.getConfig().Prefix.S2CPacketID, SUFFIX_LASTPACKETID, getIdStr(getExporter().getMaxS2CPacketID()));
 		getTabWriteBuffer().end(sw, 1);
 
 		sw.writeln("");
@@ -483,13 +477,13 @@ public class CppCodeGenerator  extends CodeGenerator
 
 		if (m_doc.getConfig().Use16BitPacketID)
 		{
-			tw.substitute("$$PacketIdGet$$", "_nsr._ReadWord(0)");
+			tw.substitute("$$PacketIdGet$$", "_nsr._ReadWordAt(0)");
 			tw.substitute("$$PacketHeaderSize$$", "4");
 			tw.substitute("$$PacketLengthPos$$", "2");
 		}
 		else
 		{
-			tw.substitute("$$PacketIdGet$$", "_nsr._ReadByte(0)");
+			tw.substitute("$$PacketIdGet$$", "_nsr._ReadByteAt(0)");
 			tw.substitute("$$PacketHeaderSize$$", "3");
 			tw.substitute("$$PacketLengthPos$$", "1");
 		}
@@ -525,7 +519,7 @@ public class CppCodeGenerator  extends CodeGenerator
 		if(m_doc.getConfig().Cpp.Server.GenerateSampleImpl)
 		{
 			TemplateBuilder tw = new TemplateBuilder(MainFrame.getCodeTemplate("server.h"));
-			substituteTemplateCommon(tw, svrClassName, (m_doc.getConfig().Prefix.C2SPacketID + C2S_LASTPACKETID),
+			substituteTemplateCommon(tw, svrClassName, (m_doc.getConfig().Prefix.C2SPacketID + SUFFIX_LASTPACKETID),
 				svrinl_filename, bUseStage ? "[0]" : "");
 
 			sw = openCodeStream(svrh_filename);
@@ -731,7 +725,7 @@ public class CppCodeGenerator  extends CodeGenerator
 		if(m_doc.getConfig().Cpp.Client.GenerateSampleImpl)
 		{
 			TemplateBuilder tw = new TemplateBuilder(MainFrame.getCodeTemplate("client.h"));
-			substituteTemplateCommon(tw, cliClassName, (m_doc.getConfig().Prefix.S2CPacketID + S2C_LASTPACKETID),
+			substituteTemplateCommon(tw, cliClassName, (m_doc.getConfig().Prefix.S2CPacketID + SUFFIX_LASTPACKETID),
 				cliinl_filename, "");
 
 			sw = openCodeStream(clih_filename);

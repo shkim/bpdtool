@@ -137,6 +137,11 @@ public class Packet extends ItemCommons
 		return m_nDirectCastPacketLen;
 	}
 
+	public boolean isFixedLengthPacket()
+	{
+		return (m_nDirectCastPacketLen > 0);
+	}
+
 	public boolean hasAutoRepeat()
 	{
 		return m_hasAutoRepeat;
@@ -152,7 +157,7 @@ public class Packet extends ItemCommons
 		return m_nMaxPacketBufferSize;
 	}
 
-	public void prepareExport(ITextWriter logger, Set<Integer> expLangs)
+	public void prepareExport(ITextWriter logger, Set<Integer> expLangs, PxConfig config)
 	{
 		m_nRepeatDepth = 0;
 		m_hasAutoRepeat = false;
@@ -275,15 +280,24 @@ public class Packet extends ItemCommons
 			return;
 		}
 
-		if (m_isDirectCasting)
+		// set m_nDirectCastPacketLen > 0, if fixed-length packet
 		{
+			boolean verifyDCast = m_isDirectCasting && (config.Cpp.DisableDirectCasting == false);
+			boolean isFixedLengthPacket = true;
+
 			m_nDirectCastPacketLen = 0;
 			for (PacketField fld : m_fields)
 			{
 				if (fld.getRepeatInfo().isVariableRepeat())
 				{
-					logger.writeln("Variable-length repeat ({0}) is not allowed for Direct-Casting packet ({1}).", fld.getName(), getName());
-					return;
+					if (verifyDCast)
+					{
+						logger.writeln("Variable-length repeat ({0}) is not allowed for Direct-Casting packet ({1}).", fld.getName(), getName());
+						return;
+					}
+
+					isFixedLengthPacket = false;
+					break;
 				}
 
 				if (fld.getPrimitiveType() != null)
@@ -303,14 +317,26 @@ public class Packet extends ItemCommons
 					}
 					else
 					{
-						logger.writeln("Variable-length type ({0}) is not allowed for Direct-Casting packet ({1}).", fld.getName(), getName());
-						return;
+						if (verifyDCast)
+						{
+							logger.writeln("Variable-length type ({0}) is not allowed for Direct-Casting packet ({1}).", fld.getName(), getName());
+							return;
+						}
+
+						isFixedLengthPacket = false;
+						break;
 					}
 				}
 				else if (fld.getCustomType() instanceof BlindClass)
 				{
-					logger.writeln("BlindClass field ({0}) is not allowed for Direct-Casting packet({1}).", fld.getName(), getName());
-					return;
+					if (verifyDCast)
+					{
+						logger.writeln("BlindClass field ({0}) is not allowed for Direct-Casting packet({1}).", fld.getName(), getName());
+						return;
+					}
+
+					isFixedLengthPacket = false;
+					break;
 				}
 				else
 				{
@@ -330,11 +356,20 @@ public class Packet extends ItemCommons
 					}
 					else
 					{
-						logger.writeln("Variable-length struct type ({0}) is not allowed for Direct-Casting packet ({1}).", fld.getName(), getName());
-						return;
+						if (verifyDCast)
+						{
+							logger.writeln("Variable-length struct type ({0}) is not allowed for Direct-Casting packet ({1}).", fld.getName(), getName());
+							return;
+						}
+
+						isFixedLengthPacket = false;
+						break;
 					}
 				}
 			}
+
+			if (!isFixedLengthPacket)
+				m_nDirectCastPacketLen = 0;
 		}
 
 		if (nStringFieldCnt > 0)

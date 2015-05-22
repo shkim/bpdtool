@@ -7,6 +7,7 @@ import java.awt.event.*;
 import java.awt.dnd.*;
 import java.awt.datatransfer.*;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 
 import bpdtool.data.Protocol;
@@ -154,6 +155,16 @@ public class MainFrame extends JFrame
                 }
             });
             fileMenu.add(miFileExport);
+
+            JMenuItem miCopyNetstreamH = new JMenuItem("Copy netstream.h file to", 'c');
+            miCopyNetstreamH.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent actionEvent)
+                {
+                    onMenuFileCopyNetstreamH();
+                }
+            });
+            fileMenu.add(miCopyNetstreamH);
 
             fileMenu.addSeparator();
             JMenuItem miFileExit = new JMenuItem("Exit", 'x');
@@ -360,6 +371,26 @@ public class MainFrame extends JFrame
     {
         m_form.updateToDocument();
         ExportDlg.doModal();
+    }
+
+    private void onMenuFileCopyNetstreamH()
+    {
+        JFileChooser fc = new JFileChooser();
+        fc.setCurrentDirectory(new File("."));
+        fc.setDialogTitle("Select a directory");
+        fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        fc.setAcceptAllFileFilterUsed(false);
+        if (fc.showSaveDialog(this) != JFileChooser.APPROVE_OPTION)
+            return;
+
+	    try
+	    {
+		    copyResourceTo("netstream.h", fc.getSelectedFile());
+	    }
+	    catch(Exception ex)
+	    {
+		    showMsgBox("Failed: " + ex.getMessage(), JOptionPane.ERROR_MESSAGE);
+	    }
     }
 
     private void onMenuFileExit()
@@ -597,6 +628,28 @@ public class MainFrame extends JFrame
             throw new Exception("Couldn't find code template: " + path);
         }
     }
+
+	public static void copyResourceTo(String path, File destDir) throws Exception
+	{
+		InputStream isr = s_this.getClass().getResourceAsStream("/" + path);
+		if (isr != null)
+		{
+			byte[] buff = new byte[isr.available()];
+			isr.read(buff);
+			isr.close();
+
+			File destFile = new File(destDir, path);
+			FileOutputStream fos = new FileOutputStream(destFile);
+			fos.write(buff);
+			fos.close();
+
+			showMsgBox("File saved: " + destFile.getAbsolutePath(), JOptionPane.INFORMATION_MESSAGE);
+		}
+		else
+		{
+			throw new Exception("Resource not found: " + path);
+		}
+	}
 
 
 

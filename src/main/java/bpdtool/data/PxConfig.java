@@ -248,6 +248,9 @@ public class PxConfig
 		Cpp.Server.CustomHeader = "#include \"stdafx.h\"\n#include \"netstream.h\"\n#include \"TheUser.h\"";
 		Cpp.Client.CustomHeader = "#include \"stdafx.h\"\n#include \"netstream.h\"\n#include \"TheServer.h\"";
 
+		Js.Server.ClassName = "TheUser";
+		Js.Client.ClassName = "TheServer";
+
 		setDefaultDelegatePrimitives();
 	}
 

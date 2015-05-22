@@ -104,7 +104,7 @@ public class Exporter
 					uniqueNames.add(pkt.getName());
 				}
 
-				pkt.prepareExport(logger, langsSet);
+				pkt.prepareExport(logger, langsSet, m_doc.getConfig());
 
 				if (pkt.getFlow() != Packet.FLOW_C2S)
 				{
@@ -135,6 +135,8 @@ public class Exporter
 				}
 			}
 		}
+		--m_nMaxC2SPacketID;
+		--m_nMaxS2CPacketID;
 
 		if (uniqueNames.isEmpty())
 		{

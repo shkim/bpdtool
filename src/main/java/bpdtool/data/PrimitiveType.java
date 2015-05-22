@@ -12,16 +12,6 @@ public class PrimitiveType implements Comparable
 	public static final int WIDESTRING = 12;
 	public static final int WIDESTRING_TINY = 13;
 
-/*
-	public static final int STD_STRING =21;
-	public static final int STD_STRING_TINY =22;
-	public static final int TSTRING =23;
-	public static final int TSTRING_TINY =24;
-	public static final int STD_WIDESTRING =30;
-	public static final int STD_WIDESTRING_TINY =31;
-	public static final int STD_TSTRING =32;
-	public static final int STD_TSTRING_TINY =33;
-*/
 	public static final int BUFFER = 20;
 	public static final int BUFFER_TINY = 21;
 
@@ -45,6 +35,11 @@ public class PrimitiveType implements Comparable
 	public int getSizeBytes()
 	{
 		return m_sizeBytes;
+	}
+
+	public boolean isVariableLengthTiny()
+	{
+		return (m_category == STRING_TINY || m_category == WIDESTRING_TINY || m_category == BUFFER_TINY);
 	}
 
 	public String getDescription()

@@ -34,6 +34,8 @@ public class LangOptsForm
 	private JCheckBox m_chkCppClientBE;
 	private JCheckBox m_chkCppNoDirectCast;
 	private JCheckBox m_chkCppUseStdVector;
+	private JCheckBox m_chkCppServerGenImpl;
+	private JCheckBox m_chkCppClientGenImpl;
 
 	public void updateFromDocument(Protocol doc)
 	{
@@ -47,6 +49,7 @@ public class LangOptsForm
 		m_taCppServerHeader.setText(config.Cpp.Server.CustomHeader);
 		m_chkCppServerSkipCommon.setSelected(config.Cpp.Server.SkipGenerateCommon);
 		m_chkCppServerBE.setSelected(config.Cpp.Server.SwapEndian);
+		m_chkCppServerGenImpl.setSelected(config.Cpp.Server.GenerateSampleImpl);
 
 		m_tfCppClientClass.setText(config.Cpp.Client.ClassName);
 		m_tfCppClientNamespace.setText(config.Cpp.Client.Namespace);
@@ -56,6 +59,7 @@ public class LangOptsForm
 		m_taCppClientHeader.setText(config.Cpp.Client.CustomHeader);
 		m_chkCppClientSkipCommon.setSelected(config.Cpp.Client.SkipGenerateCommon);
 		m_chkCppClientBE.setSelected(config.Cpp.Client.SwapEndian);
+		m_chkCppClientGenImpl.setSelected(config.Cpp.Client.GenerateSampleImpl);
 
 		m_tfCppCommonFile.setText(config.Cpp.CommonFileName);
 		m_chkCppCapitalize.setSelected(config.Cpp.CapitalizeMethodName);
@@ -83,6 +87,7 @@ public class LangOptsForm
 		config.Cpp.Server.CustomHeader = m_taCppServerHeader.getText().trim();
 		config.Cpp.Server.SkipGenerateCommon = m_chkCppServerSkipCommon.isSelected();
 		config.Cpp.Server.SwapEndian = m_chkCppServerBE.isSelected();
+		config.Cpp.Server.GenerateSampleImpl = m_chkCppServerGenImpl.isSelected();
 
 		config.Cpp.Client.ClassName = m_tfCppClientClass.getText().trim();
 		config.Cpp.Client.Namespace = m_tfCppClientNamespace.getText().trim();
@@ -92,6 +97,7 @@ public class LangOptsForm
 		config.Cpp.Client.CustomHeader = m_taCppClientHeader.getText().trim();
 		config.Cpp.Client.SkipGenerateCommon = m_chkCppClientSkipCommon.isSelected();
 		config.Cpp.Client.SwapEndian = m_chkCppClientBE.isSelected();
+		config.Cpp.Client.GenerateSampleImpl = m_chkCppClientGenImpl.isSelected();
 
 		config.Cpp.CommonFileName = m_tfCppCommonFile.getText().trim();
 		config.Cpp.CapitalizeMethodName = m_chkCppCapitalize.isSelected();
