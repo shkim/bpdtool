@@ -1,5 +1,6 @@
 package bpdtool.codegen;
 
+import bpdtool.Main;
 import bpdtool.data.*;
 import bpdtool.Util;
 import bpdtool.gui.MainFrame;
@@ -70,7 +71,7 @@ public class AsCodeGenerator extends CodeGenerator
 
 		StreamWriter sw = openCodeStream(filename);
 
-		TemplateBuilder tw = new TemplateBuilder(MainFrame.getCodeTemplate("main.as"));
+		TemplateBuilder tw = new TemplateBuilder(Main.getCodeTemplate("main.as"));
 		
 		if(m_doc.getConfig().As3.Client.ForStressTester)
 		{
@@ -98,7 +99,7 @@ public class AsCodeGenerator extends CodeGenerator
 			}
 			tw.substitute("$$Name2IDs$$", n2i.toString());
 			
-			TemplateBuilder tw2 = new TemplateBuilder(MainFrame.getCodeTemplate("stt.as"));
+			TemplateBuilder tw2 = new TemplateBuilder(Main.getCodeTemplate("stt.as"));
 			tw.substitute("$$StressFuncs$$", tw2.getResult());
 		}
 		else

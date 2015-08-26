@@ -6,10 +6,19 @@ import bpdtool.codegen.ITextWriter;
 import bpdtool.data.Protocol;
 import bpdtool.gui.MainFrame;
 
+import javax.swing.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+
 public class Main implements ITextWriter
 {
+	private static Main s_this;
+
 	public static void main(String args[])
 	{
+		s_this = new Main();
+
 		if(args.length >= 1)
 		{
 			if(args.length >= 2)
@@ -23,7 +32,7 @@ public class Main implements ITextWriter
 
 			if(Util.isFileExists(args[0]))
 			{
-				batchExport(args[0]);
+				s_this.batchExport(args[0]);
 				return;
 			}
 		}
@@ -31,31 +40,29 @@ public class Main implements ITextWriter
 		MainFrame.launch(null);
 	}
 
-	static void batchExport(String filename)
+	private void batchExport(String filename)
 	{
-		Main consoleOut = new Main();
-
 		try
 		{
-			consoleOut.writeln("Opening Protocol XML file: " + filename);
+			writeln("Opening Protocol XML file: " + filename);
 			Protocol doc = new Protocol(filename);
 			Exporter exp = new Exporter(doc);
 
 			ErrorLogger logger = new ErrorLogger();
 			if (!exp.prepare(logger))
 			{
-				consoleOut.writeln(logger.getLoggedString());
+				writeln(logger.getLoggedString());
 			}
 			else
 			{
-				if (exp.export(consoleOut))
-					consoleOut.writeln("Successfully exported.");
+				if (exp.export(this))
+					writeln("Successfully exported.");
 			}
 		}
 		catch(Exception ex)
 		{
 			ex.printStackTrace();
-			consoleOut.writeln("Export failed: " + ex.getMessage());
+			writeln("Export failed: " + ex.getMessage());
 		}
 	}
 
@@ -69,5 +76,32 @@ public class Main implements ITextWriter
 	public void writeln(String format, Object... args)
 	{
 		System.out.println(Util.stringFormat(format, args));
+	}
+
+	public static ImageIcon createImageIcon(String path, String alt)
+	{
+		java.net.URL imgUrl = s_this.getClass().getResource("/" + path);
+		if (imgUrl != null)
+		{
+			return new ImageIcon(imgUrl, alt);
+		}
+
+		throw new RuntimeException("Couldn't find image: " + path);
+	}
+
+	public static String getCodeTemplate(String path) throws Exception
+	{
+		InputStream isr = s_this.getClass().getResourceAsStream("/" + path);
+		if (isr != null)
+		{
+			byte[] buff = new byte[isr.available()];
+			isr.read(buff);
+			isr.close();
+			return new String(buff, "UTF-8");
+		}
+		else
+		{
+			throw new Exception("Couldn't find code template: " + path);
+		}
 	}
 }

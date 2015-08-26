@@ -1,6 +1,7 @@
 package bpdtool.gui;
 
 
+import bpdtool.Main;
 import bpdtool.Util;
 import bpdtool.data.ItemCommons;
 import bpdtool.data.Packet;
@@ -26,8 +27,8 @@ class CollapseButton extends JComponent
 
 	static
 	{
-		s_imgPlus = MainFrame.createImageIcon("plus.png", "PLUS");
-		s_imgMinus = MainFrame.createImageIcon("minus.png", "MINUS");
+		s_imgPlus = Main.createImageIcon("plus.png", "PLUS");
+		s_imgMinus = Main.createImageIcon("minus.png", "MINUS");
 	}
 
 	private boolean m_isCollapsed;

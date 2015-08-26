@@ -1,5 +1,6 @@
 package bpdtool.codegen;
 
+import bpdtool.Main;
 import bpdtool.data.*;
 import bpdtool.Util;
 import bpdtool.gui.MainFrame;
@@ -518,7 +519,7 @@ public class CppCodeGenerator  extends CodeGenerator
 		// server header body (.h)
 		if(m_doc.getConfig().Cpp.Server.GenerateSampleImpl)
 		{
-			TemplateBuilder tw = new TemplateBuilder(MainFrame.getCodeTemplate("server.h"));
+			TemplateBuilder tw = new TemplateBuilder(Main.getCodeTemplate("server.h"));
 			substituteTemplateCommon(tw, svrClassName, (m_doc.getConfig().Prefix.C2SPacketID + SUFFIX_LASTPACKETID),
 				svrinl_filename, bUseStage ? "[0]" : "");
 
@@ -724,7 +725,7 @@ public class CppCodeGenerator  extends CodeGenerator
 		// client header body (.h)
 		if(m_doc.getConfig().Cpp.Client.GenerateSampleImpl)
 		{
-			TemplateBuilder tw = new TemplateBuilder(MainFrame.getCodeTemplate("client.h"));
+			TemplateBuilder tw = new TemplateBuilder(Main.getCodeTemplate("client.h"));
 			substituteTemplateCommon(tw, cliClassName, (m_doc.getConfig().Prefix.S2CPacketID + SUFFIX_LASTPACKETID),
 				cliinl_filename, "");
 

@@ -1,5 +1,6 @@
 package bpdtool.gui;
 
+import bpdtool.Main;
 import bpdtool.Util;
 import bpdtool.data.*;
 
@@ -25,11 +26,11 @@ public class PacketView extends ItemView_WithTable
 
 	static
 	{
-		ImgC2S = MainFrame.createImageIcon("c2s.png", "Client to Server");
-		ImgS2C = MainFrame.createImageIcon("s2c.png", "Server to Client");
-		ImgInter = MainFrame.createImageIcon("inter.png", "Inter Exchange");
-		ImgDirectCast = MainFrame.createImageIcon("dcast.png", "Direct Casting");
-		ImgGenerateBuilder = MainFrame.createImageIcon("builder.png", "Generate Builder");
+		ImgC2S = Main.createImageIcon("c2s.png", "Client to Server");
+		ImgS2C = Main.createImageIcon("s2c.png", "Server to Client");
+		ImgInter = Main.createImageIcon("inter.png", "Inter Exchange");
+		ImgDirectCast = Main.createImageIcon("dcast.png", "Direct Casting");
+		ImgGenerateBuilder = Main.createImageIcon("builder.png", "Generate Builder");
 	}
 
 	private Packet m_data;

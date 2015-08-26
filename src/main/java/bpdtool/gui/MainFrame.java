@@ -1,5 +1,6 @@
 package bpdtool.gui;
 
+import bpdtool.Main;
 import bpdtool.Util;
 
 import javax.swing.*;
@@ -602,18 +603,7 @@ public class MainFrame extends JFrame
         return JOptionPane.showConfirmDialog(s_this, msg, APP_TITLE, msgType);
     }
 
-    public static ImageIcon createImageIcon(String path, String alt)
-    {
-        java.net.URL imgUrl = s_this.getClass().getResource("/" + path);
-        if (imgUrl != null)
-        {
-            return new ImageIcon(imgUrl, alt);
-        }
-
-        throw new RuntimeException("Couldn't find image: " + path);
-    }
-
-    public static String getCodeTemplate(String path) throws Exception
+    public static void copyResourceTo(String path, File destDir) throws Exception
     {
         InputStream isr = s_this.getClass().getResourceAsStream("/" + path);
         if (isr != null)
@@ -621,36 +611,19 @@ public class MainFrame extends JFrame
             byte[] buff = new byte[isr.available()];
             isr.read(buff);
             isr.close();
-            return new String(buff, "UTF-8");
+
+            File destFile = new File(destDir, path);
+            FileOutputStream fos = new FileOutputStream(destFile);
+            fos.write(buff);
+            fos.close();
+
+            showMsgBox("File saved: " + destFile.getAbsolutePath(), JOptionPane.INFORMATION_MESSAGE);
         }
         else
         {
-            throw new Exception("Couldn't find code template: " + path);
+            throw new Exception("Resource not found: " + path);
         }
     }
-
-	public static void copyResourceTo(String path, File destDir) throws Exception
-	{
-		InputStream isr = s_this.getClass().getResourceAsStream("/" + path);
-		if (isr != null)
-		{
-			byte[] buff = new byte[isr.available()];
-			isr.read(buff);
-			isr.close();
-
-			File destFile = new File(destDir, path);
-			FileOutputStream fos = new FileOutputStream(destFile);
-			fos.write(buff);
-			fos.close();
-
-			showMsgBox("File saved: " + destFile.getAbsolutePath(), JOptionPane.INFORMATION_MESSAGE);
-		}
-		else
-		{
-			throw new Exception("Resource not found: " + path);
-		}
-	}
-
 
 
     public static void launch(String filename)

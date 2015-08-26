@@ -1,5 +1,6 @@
 package bpdtool.codegen;
 
+import bpdtool.Main;
 import bpdtool.Util;
 import bpdtool.data.*;
 import bpdtool.gui.MainFrame;
@@ -216,7 +217,7 @@ public class JsCodeGenerator extends CodeGenerator
 
 	private TemplateBuilder getTemplate(String templFilename) throws Exception
 	{
-		TemplateBuilder templ = new TemplateBuilder(MainFrame.getCodeTemplate(templFilename));
+		TemplateBuilder templ = new TemplateBuilder(Main.getCodeTemplate(templFilename));
 
 		templ.substitute("$$LEBE$$", m_LEorBE);
 		templ.substitute("$$PacketIdType$$", getJsBufferDtypeForLengthPrefix(m_nPktHeaderLen == 3));
