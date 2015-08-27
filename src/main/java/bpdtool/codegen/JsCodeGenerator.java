@@ -395,17 +395,17 @@ public class JsCodeGenerator extends CodeGenerator
 		return (isTiny ? "UInt8" : ("UInt16" + m_LEorBE));
 	}
 
-	private void writeReader_String(ITextWriter sw, PacketField fld, int lengthBytes, boolean doAdvanceOffset)
+	private void writeReader_String(ITextWriter sw, PacketField fld, boolean isWide, boolean isTiny, boolean doAdvanceOffset)
 	{
-		String dtype = getJsBufferDtypeForLengthPrefix(lengthBytes == 1);
-		String enc = (lengthBytes == 1) ? "undefined" : m_jsWideStringEncoding;
+		String dtype = getJsBufferDtypeForLengthPrefix(isTiny);
+		String enc = isWide ? m_jsWideStringEncoding : "undefined";
 
-		sw.writeln("\tvar len_{0} = buf.read{1}(offset); offset += {2};", fld.getName(), dtype, lengthBytes);
+		sw.writeln("\tvar len_{0} = buf.read{1}(offset); offset += {2};", fld.getName(), dtype, isTiny ? 1:2);
 		sw.writeln("\tif (len_{0} > 0)", fld.getName());
 		sw.writeln("\t{");
 		sw.writeln("\t\tpkt.{0} = buf.toString({1}, offset, offset + len_{0});", fld.getName(), enc);
 		if (doAdvanceOffset)
-			sw.writeln("\t\toffset += len_{0} + {1};", fld.getName(), lengthBytes);
+			sw.writeln("\t\toffset += len_{0} + {1};", fld.getName(), isWide ? 2:1);
 		sw.writeln("\t}");
 	}
 
@@ -446,11 +446,11 @@ public class JsCodeGenerator extends CodeGenerator
 					}
 					else if (pt.getCategory() == PrimitiveType.STRING || pt.getCategory() == PrimitiveType.STRING_TINY)
 					{
-						writeReader_String(sw, fld, 1, !isLastField);
+						writeReader_String(sw, fld, false, pt.isVariableLengthTiny(), !isLastField);
 					}
-					else if (pt.getCategory() == PrimitiveType.STRING || pt.getCategory() == PrimitiveType.STRING_TINY)
+					else if (pt.getCategory() == PrimitiveType.WIDESTRING || pt.getCategory() == PrimitiveType.WIDESTRING_TINY)
 					{
-						writeReader_String(sw, fld, 2, !isLastField);
+						writeReader_String(sw, fld, true, pt.isVariableLengthTiny(), !isLastField);
 					}
 				}
 
