@@ -1,5 +1,7 @@
 # bpdtool -- Binary Protocol Designer Tool
+##### Download binary executable: [bpdtool.jar](http://shkim.github.io/dist/bpdtool.jar)
 
+### Overview
 If you would like to make your own client/server TCP/IP network program in C++,
 you may want to send and receive a C struct object as a packet.
 
